@@ -19,3 +19,6 @@ class Card(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     post_title = db.Column(db.String())
 #     post_description = db.Column(db.String())
+
+class AccessTokenTable(db.Model):
+    access_token = db.Column(db.String(), primary_key=True)

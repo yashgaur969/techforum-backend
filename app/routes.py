@@ -1,7 +1,9 @@
 from os import abort
-from flask import request
+from flask import request, jsonify
+from flask_jwt_extended import create_access_token
+
 from app import app, db
-from app.models import User, Card
+from app.models import User, Card, AccessTokenTable
 
 
 @app.route('/hello-world')
@@ -24,7 +26,8 @@ def new_user():
                     email_id=email_id, password=password)
         db.session.add(user)
         db.session.commit()
-        return 'created new user {} with email {} '.format(user.first_name, user.email_id)
+        access_token = create_access_token(identity=user.email_id)
+        return jsonify(access_token=access_token)
 
 
 @app.route('/users/login', methods=['POST'])
@@ -36,14 +39,11 @@ def login():
         if not user:
             return 'user with email {} does not exist'.format(email_id)
         if password == user.password:
-            # access_token = create_access_token(identity=user.email_id)
-            # access = AccessTokenTable(access_token=access_token)
-            # db.session.add(access)
-            # db.session.commit()
-            return {
-                'message': 'Logged in as {}'.format(user.email_id),
-                # 'access_token': access_token
-            }
+            access_token = create_access_token(identity=user.email_id)
+            access = AccessTokenTable(access_token=access_token)
+            db.session.add(access)
+            db.session.commit()
+            return jsonify(access_token=access_token)
         else:
             return 'wrong credentials'
 
