@@ -18,12 +18,15 @@ def new_user():
         last_name = request.json.get('last_name')
         email_id = request.json.get('email_id')
         password = request.json.get('password')
+        designation = request.json.get('designation')
+        dob = request.json.get('dob')
+        mobile = request.json.get('mobile')
         if first_name is None or password is None or email_id is None:
             abort()
         if User.query.filter_by(first_name=first_name).first() is not None:
             abort()
         user = User(first_name=first_name, last_name=last_name,
-                    email_id=email_id, password=password)
+                    email_id=email_id, password=password, designation=designation, dob=dob, mobile=mobile)
         db.session.add(user)
         db.session.commit()
         access_token = create_access_token(identity=user.email_id)
@@ -63,15 +66,10 @@ def card():
         return {'data': card_object}
 
 
-# @app.route('/post', methods=['POST'])
-# def postdata():
-#     if request.method == 'POST':
-#         post_title = request.json.get('post_title')
-#         post_description = request.json.get('post_description')
-#         postcard = PostData(post_title=post_title, post_description=post_description)
-#         db.session.add(postcard)
-#         db.session.commit()
-#         return "new post card is created"
-
+@app.route('/info/<email_id>', methods=['POST', 'GET'])
+def user_info(email_id):
+    if request.method == 'GET':
+        user = User.query.filter_by(email_id=email_id).first()
+        
 
 

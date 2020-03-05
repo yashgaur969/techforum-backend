@@ -7,6 +7,9 @@ class User(db.Model):
     last_name = db.Column(db.String())
     email_id = db.Column(db.String())
     password = db.Column(db.String())
+    designation = db.Column(db.String())
+    dob = db.Column(db.String())
+    mobile = db.Column(db.String())
 
 
 class Card(db.Model):
