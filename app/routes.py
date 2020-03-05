@@ -46,7 +46,8 @@ def login():
             access = AccessTokenTable(access_token=access_token)
             db.session.add(access)
             db.session.commit()
-            return jsonify(access_token=access_token)
+            first_name = user.first_name
+            return jsonify(access_token=access_token, email_id=email_id, first_name=first_name)
         else:
             return 'wrong credentials'
 
@@ -56,20 +57,30 @@ def card():
     if request.method == 'POST':
         question = request.json.get('question')
         answer = request.json.get('answer')
-        cards = Card(question=question, answer=answer)
+        first_name = request.json.get('first_name')
+        cards = Card(question=question, answer=answer, first_name=first_name)
         db.session.add(cards)
         db.session.commit()
         return "new question is created"
     if request.method == 'GET':
         cards = Card.query.all()
-        card_object = [{"question": s.question, "answer": s.answer} for s in cards]
+        card_object = [{"question": s.question, "answer": s.answer, "first_name": s.first_name} for s in cards]
         return {'data': card_object}
 
 
 @app.route('/info/<email_id>', methods=['POST', 'GET'])
 def user_info(email_id):
     if request.method == 'GET':
-        user = User.query.filter_by(email_id=email_id).first()
-        
+        user = User.query.filter_by(email_id=email_id)
+        user_object = [
+            {"first_name": s.first_name, "last_name": s.last_name, "designation": s.designation, "email_id": s.email_id,
+             "mobile": s.mobile, "dob": s.dob} for s in user]
+        return {'data': user_object}
 
 
+@app.route('/user/posts/<first_name>', methods=['POST', 'GET'])
+def user_post(first_name):
+    if request.method == 'GET':
+        user_cards = Card.query.filter_by(first_name=first_name)
+        usercard_object = [{"question": s.question, "answer": s.answer, "first_name": s.first_name} for s in user_cards]
+        return {'data': usercard_object}

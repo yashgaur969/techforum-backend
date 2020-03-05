@@ -16,6 +16,7 @@ class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String())
     answer = db.Column(db.String())
+    first_name = db.Column(db.String())
 
 
 # class PostData(db.Model):
