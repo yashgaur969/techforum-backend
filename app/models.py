@@ -1,6 +1,7 @@
 from app import db
 
 
+# model for creating a new user
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String())
@@ -12,6 +13,7 @@ class User(db.Model):
     mobile = db.Column(db.String())
 
 
+# for creating a new question
 class Card(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.String())

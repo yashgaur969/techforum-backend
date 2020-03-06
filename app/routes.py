@@ -98,6 +98,7 @@ def user_post(first_name):
         return {'data': usercard_object}
 
 
+# api to get the popular questions from all questions
 @app.route('/popular/page/<int:page>')
 @app.route('/popular', methods=['GET'])
 def popular_question(page=1):
