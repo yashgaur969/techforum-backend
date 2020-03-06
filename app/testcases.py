@@ -41,8 +41,6 @@ class CustomerTestCase(unittest.TestCase):
         res = self.client.post('/dashboard', json=sudo_data, content_type='application/json')
         self.assertEqual(res.status_code, 200)
 
-
-
     def tearDown(self):
         """teardown all initialized variables."""
         with app.app_context():

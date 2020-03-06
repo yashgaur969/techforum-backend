@@ -1,7 +1,7 @@
 from os import abort
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
-from app import app, db
+from app import db, app
 from app.models import User, Card, AccessTokenTable
 
 
@@ -96,3 +96,13 @@ def user_post(first_name):
                             "answer": s.answer, "first_name": s.first_name}
                            for s in user_cards]
         return {'data': usercard_object}
+
+
+@app.route('/popular/page/<int:page>')
+@app.route('/popular', methods=['GET'])
+def popular_question(page=1):
+    if request.method == 'GET':
+        popular = Card.query.paginate(page, 4, False).items
+        popular_object = [{"question": s.question, "answer": s.answer,
+                           } for s in popular]
+        return {'data': popular_object}
